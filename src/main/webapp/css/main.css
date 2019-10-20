@@ -1,0 +1,12 @@
+DIV#captcha {
+  border: 1px solid #ccc;
+  width: 120px;
+}
+
+/** 
+ * While we're having the loading class set.
+ * Removig it, will remove the loading message
+ */
+DIV#captcha.loading {
+  background: url(../img/ajax-loader.gif) center center;
+}
