@@ -126,7 +126,7 @@ public class UserResource {
 	@Path("changepass")
 	@POST
 	public Response changePassword(@javax.ws.rs.core.Context SecurityContext context,
-			@QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword) {
+			@FormParam("oldPassword") String oldPassword, @FormParam("newPassword") String newPassword) {		
 		String username = context.getUserPrincipal().getName();
 		if (oldPassword == null) {
 			return Response.serverError().header("Error", ErrorCode.NO_OLD_PASSWORD).build();
@@ -233,6 +233,7 @@ public class UserResource {
 		throw new ValidationException(Status.BAD_REQUEST);
 	}
 
+	@Path("update")		//RKu:code has been missing
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -244,19 +245,28 @@ public class UserResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			try (Connection conn = ds.getConnection()) {
-				conn.setAutoCommit(false);
+/**				conn.setAutoCommit(false);
+*				try (PreparedStatement insertUserStatement = conn.prepareStatement(
+* das ist falsch		"UPDATE user_profiles (forename, surname, organisation, acceptedEmailContact, country, language, phone) VALUES (?,?,?,?,?,?,?) WHERE user_name = ?")) {
+*/
 				try (PreparedStatement insertUserStatement = conn.prepareStatement(
-						"UPDATE user_profiles (forename, surname, organisation, acceptedEmailContact, country, language, phone) VALUES (?,?,?,?,?,?,?) WHERE user_name = ?")) {
+						"UPDATE user_profiles set forename = ?, surname = ?, organisation = ?, acceptedemailcontact = ?, country = ?, language = ?, phone = ? WHERE user_name = ?")) {
 					insertUserStatement.setString(1, user.forname);
 					insertUserStatement.setString(2, user.surname);
 					insertUserStatement.setString(3, user.organisation);
-					insertUserStatement.setBoolean(4,
-							"on".equals(user.acceptedEmailContact) || "true".equals(user.acceptedEmailContact));
+//					insertUserStatement.setBoolean(4,"on".equals(user.acceptedEmailContact) || "true".equals(user.acceptedEmailContact));	// RKu: das macht keinen Sinn
+					insertUserStatement.setBoolean(4,user.acceptedEmailContact);															// RKu: daher so ... und die DB ist OK
 					insertUserStatement.setString(5, user.country);
 					insertUserStatement.setString(6, user.language);
 					insertUserStatement.setString(7, user.phone);
 					insertUserStatement.setString(8, username);
-					return Response.status(204).build();
+
+					int userUpdate = insertUserStatement.executeUpdate();	// RKu: code has been missing
+					if (userUpdate == 1) {									// RKu: code has been missing
+						return Response.ok().build();						// RKu: code has been missing
+					} else {												// RKu: code has been missing
+						return Response.status(204).build();				// RKu: operation successful but no return content
+					}
 				}
 			}
 		} catch (SQLException e) {
