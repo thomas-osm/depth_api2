@@ -212,7 +212,10 @@ public class UserResource {
 								setNewPasswordStatement.close();
 							}
 
-						}
+						} else {																						//RKu: +
+							return Response.serverError().header("Error", "2520:Validierungsfehler: dieser Benutzer (eMail-Adresse) ist nicht in der OSM-DB registriert.").build();	//RKu: eMail/user_name not found at DB table user_profiles
+						}																								//RKu: -
+						
 					} finally {
 						selectstatement.close();
 					}
