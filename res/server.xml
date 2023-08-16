@@ -38,7 +38,7 @@
          UserDatabaseRealm to authenticate users
     -->
     <Resource auth="Container" driverClassName="org.postgresql.Driver" maxActive="150" maxIdle="1" name="jdbc/postgres" password="${osmpass}" type="javax.sql.DataSource" url="jdbc:postgresql:/${osmdatabase}" username="${osmuser}" accessToUnderlyingConnectionAllowed="true"/>
-    <Resource auth="Container" driverClassName="org.postgresql.Driver" maxActive="150" maxIdle="1" name="jdbc/depth" password="${osmpass}" type="javax.sql.DataSource" url="jdbc:postgresql:/${depthdatabase}" username="${osmuser}" accessToUnderlyingConnectionAllowed="true"/>
+    <!--Resource auth="Container" driverClassName="org.postgresql.Driver" maxActive="150" maxIdle="1" name="jdbc/depth" password="${osmpass}" type="javax.sql.DataSource" url="jdbc:postgresql:/${depthdatabase}" username="${osmuser}" accessToUnderlyingConnectionAllowed="true"/-->
     
     <Resource auth="Container" description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" name="UserDatabase" pathname="conf/tomcat-users.xml" type="org.apache.catalina.UserDatabase"/>
   </GlobalNamingResources>
@@ -110,11 +110,16 @@
              resources under the key "UserDatabase".  Any edits
              that are performed against this UserDatabase are immediately
              available for use by the Realm.  --> 
-                    <Realm className="org.apache.catalina.realm.DataSourceRealm"
+     <Realm className="org.apache.catalina.realm.DataSourceRealm"
             dataSourceName="jdbc/postgres"
-            userTable="user_profiles" userNameCol="user_name" userCredCol="password"
-   userRoleTable="userroles" roleNameCol="role" localDataSource="true" digest="SHA"/>
-<!--        <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>-->
+            userTable="user_profiles" 
+            userNameCol="user_name" 
+            userCredCol="password"
+            userRoleTable="userroles" 
+            roleNameCol="role" 
+            localDataSource="true" 
+            digest="SHA"
+            debug="9"/>
       </Realm>
 
       <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">

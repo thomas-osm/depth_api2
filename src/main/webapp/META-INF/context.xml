@@ -18,35 +18,52 @@
 <!-- The contents of this file will be loaded for each web application -->
 <Context >
 
-      <Resource auth="Container" name="jdbc/postgres" 
-      
-          type="javax.sql.DataSource" username="${osmuser}" password="${osmpass}" 
-            driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/${osmdatabase}" maxActive="150"
-            maxIdle="1"/>
+      <Resource name="jdbc/postgres" 
+                auth="Container" 
+                type="javax.sql.DataSource" 
+                username="${osmuser}" 
+                password="${osmpass}" 
+                driverClassName="org.postgresql.Driver" 
+                url="jdbc:postgresql:/${osmdatabase}" 
+                maxActive="150"
+                maxIdle="1"
+      />
             
-        <Resource auth="Container" name="jdbc/depth" 
-          type="javax.sql.DataSource" username="${osmuser}" password="${osmpass}" 
-            driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/${depthdatabase}" maxActive="150"
-            maxIdle="1"/>
+      <!-- mail server knf: rachael.franken.de -->
 
-    	<Resource name="mail/Session" auth="Container"
-		            type="javax.mail.Session"
-		            mail.smtp.host="${mailserver}"/>
+    	<Resource name="mail/Session"  auth="Container" type="javax.mail.Session"
+                mail.transport.protocol="smtp"
+                mail.smtp.auth="true"
+                mail.smtp.host="${mailserver}"
+                mail.smtp.port="465"
+                mail.smtp.user="${mailname}"
+                password="${mailpass}"
+                mail.smtp.from="${mailname}"
+                mail.smtp.quitwait="false"
+                mail.smtp.starttls.enable="false"
+                mail.smtp.ssl.enable="true"
+                mail.smtp.socketFactory.class="javax.net.ssl.SSLSocketFactory"
+                mail.debug="true"
+                description="Global E-Mail Resource"
+      />
       
-                <Realm className="org.apache.catalina.realm.LockOutRealm">
-        <!-- This Realm uses the UserDatabase configured in the global JNDI
-             resources under the key "UserDatabase".  Any edits
-             that are performed against this UserDatabase are immediately
-             available for use by the Realm.  --> 
-                    <Realm className="org.apache.catalina.realm.DataSourceRealm"
-            dataSourceName="jdbc/postgres"
-            userTable="user_profiles" userNameCol="user_name" userCredCol="password"
-   userRoleTable="userroles" roleNameCol="role" localDataSource="true" digest="SHA"/>
-   
-   
-		  <Resource name="mail/Session" auth="Container"
-            type="javax.mail.Session"
-            mail.smtp.host="rachael.franken.de"/>
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        
+          <!-- This Realm uses the UserDatabase configured in the global JNDI
+                resources under the key "UserDatabase".  Any edits
+                that are performed against this UserDatabase are immediately
+                available for use by the Realm.  --> 
+          <Realm  className="org.apache.catalina.realm.DataSourceRealm"
+                  dataSourceName="jdbc/postgres"
+                  userTable="user_profiles" 
+                  userNameCol="user_name" 
+                  userCredCol="password"
+                  userRoleTable="userroles" 
+                  roleNameCol="role" 
+                  localDataSource="true" 
+                  digest="SHA"
+          />
+
       </Realm>
-            
+   
 </Context>

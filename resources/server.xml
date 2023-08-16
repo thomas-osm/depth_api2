@@ -103,17 +103,23 @@
       <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
       -->
 
-        
-    <Realm className="org.apache.catalina.realm.LockOutRealm">
+
+
+     <Realm className="org.apache.catalina.realm.LockOutRealm">
         <!-- This Realm uses the UserDatabase configured in the global JNDI
              resources under the key "UserDatabase".  Any edits
              that are performed against this UserDatabase are immediately
              available for use by the Realm.  --> 
-                    <Realm className="org.apache.catalina.realm.DataSourceRealm"
+      <Realm className="org.apache.catalina.realm.DataSourceRealm"
             dataSourceName="jdbc/postgres"
-            userTable="user_profiles" userNameCol="user_name" userCredCol="password"
-   userRoleTable="userroles" roleNameCol="role" localDataSource="true" digest="SHA"/>
-<!--        <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>-->
+            userTable="user_profiles" 
+            userNameCol="user_name" 
+            userCredCol="password"
+            userRoleTable="userroles" 
+            roleNameCol="role" 
+            localDataSource="true" 
+            digest="SHA" 
+            debug="9"/>
       </Realm>
 
       <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">

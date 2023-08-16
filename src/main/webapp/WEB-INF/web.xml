@@ -42,13 +42,13 @@
  <!-- RKu: End -->
   
   
-<!-- 
  <filter>
     <filter-name>CorsFilter</filter-name>
     <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
     <init-param>
       <param-name>cors.allowed.origins</param-name>
       <param-value>*</param-value>
+      <!-- param-value>https://depth.openseamap.eu, https://depth.openseamap.org</param-value -->
     </init-param>
     <init-param>
       <param-name>cors.allowed.methods</param-name>
@@ -81,7 +81,8 @@
     <filter-name>CorsFilter</filter-name>
     <url-pattern>/api2/*</url-pattern>
   </filter-mapping>
--->
+
+
   <resource-ref>
     <description>Postgres Datasource</description>
     <res-ref-name>jdbc/postgres</res-ref-name>
@@ -262,6 +263,14 @@
       <http-method>OPTIONS</http-method>
       <http-method>GET</http-method>
     </web-resource-collection>
+    
+    <web-resource-collection>
+      <web-resource-name>Logout</web-resource-name>
+      <url-pattern>/api2/auth/logout</url-pattern>
+      <http-method>OPTIONS</http-method>
+      <http-method>POST</http-method>
+    </web-resource-collection>
+  
   </security-constraint>
   <login-config>
     <auth-method>FORM</auth-method>
